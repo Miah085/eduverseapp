@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart'; // Ensure this path is correct
-// Import your ModulesScreen if you want to navigate further to the list of modules
-import 'modules_screen.dart';
+import 'package:go_router/go_router.dart'; // Added for navigation
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed Import
 
 class SubjectDetailScreen extends StatelessWidget {
   final String subjectName;
@@ -65,7 +64,7 @@ class SubjectDetailScreen extends StatelessWidget {
                   backgroundColor: Colors.white.withOpacity(0.2),
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(), // UPDATED: GoRouter pop
                   ),
                 ),
                 CircleAvatar(
@@ -173,15 +172,9 @@ class SubjectDetailScreen extends StatelessWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate to your existing ModulesScreen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ModulesScreen(
-                                onBack: () => Navigator.pop(context),
-                              ),
-                            ),
-                          );
+                          // UPDATED: Push to the /modules route
+                          // using push instead of go allows the back button to work
+                          context.push('/modules'); 
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF8B5CF6), // Purple

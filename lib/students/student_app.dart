@@ -1,72 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'screens/splash_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/register_screen.dart';
-import 'screens/home_dashboard_screen.dart';
-import 'screens/subjects_screen.dart';
-import 'screens/grades_screen.dart';
-import 'screens/profile_screen.dart';
-import 'screens/vr_entry_screen.dart';
-import 'screens/modules_screen.dart';
-import 'widgets/bottom_navigation.dart';
-import 'utils/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ),
-  );
-  runApp(const EduVerseApp());
-}
+// Update imports to use package path
+import 'package:eduverse/students/screens/home_dashboard_screen.dart';
+import 'package:eduverse/students/screens/subjects_screen.dart';
+import 'package:eduverse/students/screens/grades_screen.dart';
+import 'package:eduverse/students/screens/profile_screen.dart';
+import 'package:eduverse/students/screens/vr_entry_screen.dart';
+import 'package:eduverse/students/screens/modules_screen.dart';
+import 'package:eduverse/students/widgets/bottom_navigation.dart';
+import 'package:eduverse/students/utils/app_colors.dart';
 
-class EduVerseApp extends StatelessWidget {
-  const EduVerseApp({super.key});
+// Enum for internal student tabs
+enum AppScreen { home, subjects, modules, grades, profile, vrEntry }
+
+class StudentRootScreen extends StatefulWidget {
+  const StudentRootScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EduVerse',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Inter',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          primary: AppColors.primary,
-        ),
-        useMaterial3: true,
-        scaffoldBackgroundColor: AppColors.white,
-      ),
-      home: const AppNavigator(),
-    );
-  }
+  State<StudentRootScreen> createState() => _StudentRootScreenState();
 }
 
-enum AppScreen {
-  splash,
-  login,
-  register,
-  home,
-  subjects,
-  modules,
-  grades,
-  profile,
-  vrEntry,
-}
-
-class AppNavigator extends StatefulWidget {
-  const AppNavigator({super.key});
-
-  @override
-  State<AppNavigator> createState() => _AppNavigatorState();
-}
-
-class _AppNavigatorState extends State<AppNavigator> {
-  AppScreen _currentScreen = AppScreen.splash;
-  bool _isAuthenticated = false;
+class _StudentRootScreenState extends State<StudentRootScreen> {
+  AppScreen _currentScreen = AppScreen.home;
 
   void _navigateToScreen(AppScreen screen) {
     setState(() {
@@ -74,38 +31,28 @@ class _AppNavigatorState extends State<AppNavigator> {
     });
   }
 
-  void _handleLogin(String email) {
-    setState(() {
-      _isAuthenticated = true;
-      _currentScreen = AppScreen.home;
-    });
+  Future<void> _handleLogout() async {
+    // 1. Sign out from Supabase
+    await Supabase.instance.client.auth.signOut();
+
+    // 2. Redirect to Login via the Master Router
+    if (mounted) {
+      context.go('/login');
+    }
   }
 
-  void _handleRegister() {
-    setState(() {
-      _isAuthenticated = true;
-      _currentScreen = AppScreen.home;
-    });
-  }
-
-  void _handleLogout() {
-    setState(() {
-      _isAuthenticated = false;
-      _currentScreen = AppScreen.login;
-    });
-  }
-
+  // Logic to show Bottom Nav only on main tabs
   bool get _shouldShowBottomNav {
-    return _isAuthenticated &&
-        (_currentScreen == AppScreen.home ||
-            _currentScreen == AppScreen.subjects ||
-            _currentScreen == AppScreen.grades ||
-            _currentScreen == AppScreen.profile);
+    return _currentScreen == AppScreen.home ||
+        _currentScreen == AppScreen.subjects ||
+        _currentScreen == AppScreen.grades ||
+        _currentScreen == AppScreen.profile;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           _buildCurrentScreen(),
@@ -126,39 +73,32 @@ class _AppNavigatorState extends State<AppNavigator> {
 
   Widget _buildCurrentScreen() {
     switch (_currentScreen) {
-      case AppScreen.splash:
-        return SplashScreen(
-          onComplete: () => _navigateToScreen(AppScreen.login),
-        );
-      case AppScreen.login:
-        return LoginScreen(
-          onLogin: _handleLogin,
-          onNavigateToRegister: () => _navigateToScreen(AppScreen.register),
-        );
-      case AppScreen.register:
-        return RegisterScreen(
-          onRegister: _handleRegister,
-          onNavigateToLogin: () => _navigateToScreen(AppScreen.login),
-        );
       case AppScreen.home:
         return HomeDashboardScreen(
-          onNavigate: _navigateToScreen,
+          // Pass navigation callback for internal student switching
+          onNavigate: (screen) {
+            if (screen is AppScreen) {
+              _navigateToScreen(screen);
+            }
+          },
         );
       case AppScreen.subjects:
         return const SubjectsScreen();
       case AppScreen.modules:
-        return ModulesScreen(
-          onBack: () => _navigateToScreen(AppScreen.home),
-        );
+        return ModulesScreen(onBack: () => _navigateToScreen(AppScreen.home));
       case AppScreen.grades:
         return const GradesScreen();
       case AppScreen.profile:
-        return ProfileScreen(
-          onLogout: _handleLogout,
-        );
+        return ProfileScreen(onLogout: _handleLogout);
       case AppScreen.vrEntry:
-        return VREntryScreen(
-          onBack: () => _navigateToScreen(AppScreen.home),
+        return VREntryScreen(onBack: () => _navigateToScreen(AppScreen.home));
+      default:
+        return HomeDashboardScreen(
+          onNavigate: (screen) {
+            if (screen is AppScreen) {
+              _navigateToScreen(screen);
+            }
+          },
         );
     }
   }

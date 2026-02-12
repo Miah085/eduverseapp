@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-import 'vr_entry_screen.dart'; // Make sure you have your VREntryScreen file imported here
+import 'package:go_router/go_router.dart'; // Added for navigation
+import 'package:eduverse/students/utils/app_colors.dart';
+import 'package:eduverse/students/screens/vr_entry_screen.dart'; // Fixed import path
 
 class ModuleDetailScreen extends StatelessWidget {
   final String moduleName;
-  final VoidCallback onBack;
+  // onBack is less critical with GoRouter but kept for compatibility if needed
+  final VoidCallback? onBack; 
 
   const ModuleDetailScreen({
     super.key,
     required this.moduleName,
-    required this.onBack,
+    this.onBack,
   });
 
   @override
@@ -21,7 +23,14 @@ class ModuleDetailScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: onBack,
+          onPressed: () {
+            // Use GoRouter's pop if available, otherwise callback
+            if (context.canPop()) {
+              context.pop();
+            } else if (onBack != null) {
+              onBack!();
+            }
+          },
         ),
       ),
       body: SafeArea(
@@ -174,15 +183,8 @@ class ModuleDetailScreen extends StatelessWidget {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to VREntryScreen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VREntryScreen(
-                          onBack: () => Navigator.pop(context),
-                        ),
-                      ),
-                    );
+                    // UPDATED: Use GoRouter context.go()
+                    context.go('/vr-entry');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:

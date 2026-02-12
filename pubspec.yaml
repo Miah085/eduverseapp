@@ -12,8 +12,8 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Database and Routing
-  supabase_flutter: ^2.0.2
-  go_router: ^13.2.0
+  supabase_flutter: ^2.8.3
+  go_router: ^14.2.0
 
   # Required for Teacher app components
   google_fonts: ^6.1.0

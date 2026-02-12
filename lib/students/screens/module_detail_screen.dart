@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-import 'vr_entry_screen.dart'; // Make sure you have your VREntryScreen file imported here
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed Import
+import 'vr_entry_screen.dart'; // Local import is fine here
 
 class ModuleDetailScreen extends StatelessWidget {
   final String moduleName;
@@ -30,7 +30,7 @@ class ModuleDetailScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              // --- Header Icon (Matches the Figma design) ---
+              // --- Header Icon ---
               Center(
                 child: SizedBox(
                   width: 160,
@@ -108,7 +108,7 @@ class ModuleDetailScreen extends StatelessWidget {
 
               // --- Title & Subtitle ---
               Text(
-                moduleName, // Displays the name of the clicked module
+                moduleName,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 26,
@@ -131,7 +131,7 @@ class ModuleDetailScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB), // Very light grey
+                  color: const Color(0xFFF9FAFB),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: Colors.grey.shade200),
                 ),
@@ -185,8 +185,7 @@ class ModuleDetailScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color(0xFF818CF8), // Matches header icon
+                    backgroundColor: const Color(0xFF818CF8),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

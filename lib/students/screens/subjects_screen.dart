@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-// IMPORT THE NEW SCREEN
-import 'subject_detail_screen.dart';
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed path
+import 'subject_detail_screen.dart'; // Local import for detail screen
 
 class SubjectsScreen extends StatelessWidget {
   const SubjectsScreen({super.key});
@@ -71,237 +70,238 @@ class SubjectsScreen extends StatelessWidget {
       },
     ];
 
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.white, AppColors.gray50],
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.white, AppColors.gray50],
+          ),
         ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Header
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Color(0x0D000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 1))
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('My Subjects',
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.gray800)),
-                    const SizedBox(height: 4),
-                    const Text('Choose a subject to explore',
-                        style:
-                            TextStyle(fontSize: 16, color: AppColors.gray600)),
-                  ],
-                ),
-              ),
-
-              // Progress Card
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                child: Container(
+        child: SafeArea(
+          bottom: false,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Header
+                Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [AppColors.primary, AppColors.primaryLight]),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4))
-                    ],
-                  ),
-                  child: Column(
+                  decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0x0D000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 1))
+                      ]),
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Overall Progress',
+                      Text('My Subjects',
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 30,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.white)),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          _buildProgressStat('6', 'Active Subjects'),
-                          _buildProgressStat('60', 'Total Modules'),
-                          _buildProgressStat('58%', 'Avg Progress'),
-                        ],
-                      ),
+                              color: AppColors.gray800)),
+                      SizedBox(height: 4),
+                      Text('Choose a subject to explore',
+                          style:
+                              TextStyle(fontSize: 16, color: AppColors.gray600)),
                     ],
                   ),
                 ),
-              ),
 
-              // Subject List
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
-                child: Column(
-                  children: subjects.map((subject) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                                color: AppColors.black.withOpacity(0.05),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2))
+                // Progress Card
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [AppColors.primary, AppColors.primaryLight]),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.primary.withOpacity(0.3),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4))
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Overall Progress',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.white)),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            _buildProgressStat('6', 'Active Subjects'),
+                            _buildProgressStat('60', 'Total Modules'),
+                            _buildProgressStat('58%', 'Avg Progress'),
                           ],
                         ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Subject List
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
+                  child: Column(
+                    children: subjects.map((subject) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
                             borderRadius: BorderRadius.circular(24),
-                            // ----------------------------------------------------------------
-                            // UPDATED: Navigation logic added here
-                            // ----------------------------------------------------------------
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubjectDetailScreen(
-                                    subjectName: subject['name'] as String,
-                                    image: subject['image'] as String,
-                                    moduleCount: subject['modules'] as int,
-                                    duration:
-                                        "12.5 Hours", // Example static data
-                                    progress: subject['progress'] as double,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: AppColors.black.withOpacity(0.05),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2))
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(24),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SubjectDetailScreen(
+                                      subjectName: subject['name'] as String,
+                                      image: subject['image'] as String,
+                                      moduleCount: subject['modules'] as int,
+                                      duration: "12.5 Hours",
+                                      progress: subject['progress'] as double,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            // ----------------------------------------------------------------
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        width: 64,
-                                        height: 64,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                subject['image'] as String),
-                                            fit: BoxFit.cover,
-                                            opacity: 0.3,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          width: 64,
+                                          height: 64,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  subject['image'] as String),
+                                              fit: BoxFit.cover,
+                                              opacity: 0.3,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        width: 64,
-                                        height: 64,
-                                        decoration: BoxDecoration(
-                                          gradient: subject['color']
-                                              as LinearGradient,
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: AppColors.black
-                                                    .withOpacity(0.1),
-                                                blurRadius: 8,
-                                                offset: const Offset(0, 2))
-                                          ],
+                                        Container(
+                                          width: 64,
+                                          height: 64,
+                                          decoration: BoxDecoration(
+                                            gradient: subject['color']
+                                                as LinearGradient,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: AppColors.black
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 2)),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                              subject['icon'] as IconData,
+                                              size: 32,
+                                              color: AppColors.white
+                                                  .withOpacity(0.9)),
                                         ),
-                                        child: Icon(subject['icon'] as IconData,
-                                            size: 32,
-                                            color: AppColors.white
-                                                .withOpacity(0.9)),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(subject['name'] as String,
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.gray800)),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                            '${subject['modules']} modules available',
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: AppColors.gray600)),
-                                        const SizedBox(height: 8),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                height: 8,
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.gray100,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4)),
-                                                child: FractionallySizedBox(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  widthFactor:
-                                                      subject['progress']
-                                                          as double,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      gradient: subject['color']
-                                                          as LinearGradient,
+                                      ],
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(subject['name'] as String,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors.gray800)),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                              '${subject['modules']} modules available',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: AppColors.gray600)),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 8,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.gray100,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              4),
+                                                              4)),
+                                                  child: FractionallySizedBox(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    widthFactor:
+                                                        subject['progress']
+                                                            as double,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        gradient: subject[
+                                                                'color']
+                                                            as LinearGradient,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                                '${((subject['progress'] as double) * 100).toInt()}%',
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: AppColors.gray700)),
-                                          ],
-                                        ),
-                                      ],
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                  '${((subject['progress'] as double) * 100).toInt()}%',
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color:
+                                                          AppColors.gray700)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

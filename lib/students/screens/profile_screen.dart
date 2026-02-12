@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // Added Supabase
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed path
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -13,6 +14,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  
+  // Get the current logged-in user from Supabase
+  final user = Supabase.instance.client.auth.currentUser;
 
   @override
   void initState() {
@@ -31,6 +35,11 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Logic to handle display name and initials
+    String userEmail = user?.email ?? 'student@eduverse.com';
+    String initial = userEmail.isNotEmpty ? userEmail[0].toUpperCase() : 'S';
+    String displayName = userEmail.split('@')[0];
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -84,10 +93,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
-                                  'A',
-                                  style: TextStyle(
+                                  initial, // Connected to Supabase
+                                  style: const TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.gray800,
@@ -116,9 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Alex Johnson',
-                      style: TextStyle(
+                    Text(
+                      displayName, // Connected to Supabase
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
@@ -152,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'Member since January 2026',
+                            'Member since ${DateTime.now().year}',
                             style: TextStyle(
                               fontSize: 12,
                               color: AppColors.white.withOpacity(0.9),
@@ -182,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 _buildInfoCard(
                   Icons.email,
                   'Email',
-                  'alex.johnson@eduverse.com',
+                  userEmail, // Connected to Supabase
                   AppColors.accentBlue,
                   AppColors.primary,
                 ),
@@ -190,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 _buildInfoCard(
                   Icons.phone,
                   'Phone',
-                  '+1 (555) 123-4567',
+                  '+63 000 000 0000',
                   AppColors.accentYellow,
                   AppColors.orange,
                 ),
@@ -198,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 _buildInfoCard(
                   Icons.location_on,
                   'Location',
-                  'New York, USA',
+                  'Philippines',
                   AppColors.accentLavender,
                   AppColors.purple,
                 ),

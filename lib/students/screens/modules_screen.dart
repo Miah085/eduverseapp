@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-import '../main.dart';
-// IMPORT THE NEW SCREEN HERE
-import 'module_detail_screen.dart';
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed path
+import 'module_detail_screen.dart'; // Local import for the detail screen
 
 class ModulesScreen extends StatefulWidget {
   final VoidCallback onBack;
@@ -27,6 +25,7 @@ class _ModulesScreenState extends State<ModulesScreen>
       progress: 100,
       lessons: 6,
     ),
+    // ... rest of your module data is correct
     ModuleData(
       title: 'The Pyramids Mystery',
       status: ModuleStatus.completed,
@@ -277,7 +276,6 @@ class _ModulesScreenState extends State<ModulesScreen>
           child: Opacity(
             opacity: _moduleControllers[index].value,
             child: GestureDetector(
-              // NAVIGATION LOGIC ADDED HERE
               onTap: module.status != ModuleStatus.locked
                   ? () {
                       Navigator.push(

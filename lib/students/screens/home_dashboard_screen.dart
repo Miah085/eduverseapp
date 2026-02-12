@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-import '../main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // Added Supabase
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed Import
+import 'package:eduverse/students/student_app.dart'; // Fixed Import for AppScreen
 
 class HomeDashboardScreen extends StatefulWidget {
   final Function(AppScreen) onNavigate;
@@ -14,6 +15,9 @@ class HomeDashboardScreen extends StatefulWidget {
 class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
+  
+  // Get current user for the greeting
+  final user = Supabase.instance.client.auth.currentUser;
 
   @override
   void initState() {
@@ -32,6 +36,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Get the display name from metadata, or fallback to email username, or 'Student'
+    String displayName = 'Student';
+    if (user != null) {
+      if (user!.userMetadata != null && user!.userMetadata!.containsKey('full_name')) {
+        displayName = user!.userMetadata!['full_name'];
+      } else if (user!.email != null) {
+        displayName = user!.email!.split('@')[0];
+      }
+    }
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -68,20 +82,21 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello, Alex! 👋',
-                              style: TextStyle(
+                              'Hello, $displayName! 👋', // Connected to Supabase
+                              style: const TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.white,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 4),
-                            Text(
+                            const SizedBox(height: 4),
+                            const Text(
                               'Ready to learn something new?',
                               style: TextStyle(
                                 fontSize: 14,
@@ -92,6 +107,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         ),
                       ),
                       GestureDetector(
+                        // Navigates to Profile Tab
                         onTap: () => widget.onNavigate(AppScreen.profile),
                         child: Container(
                           width: 48,
@@ -113,10 +129,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                 ),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
-                                  'A',
-                                  style: TextStyle(
+                                  displayName.isNotEmpty
+                                      ? displayName[0].toUpperCase()
+                                      : 'S',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.gray800,
@@ -240,30 +258,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     children: [
                       Container(
                         height: 128,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24),
                             topRight: Radius.circular(24),
                           ),
-                          image: const DecorationImage(
+                          image: DecorationImage(
                             image: NetworkImage(
                               'https://images.unsplash.com/photo-1764706166195-cccf1238d510?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhbmNpZW50JTIwZWd5cHQlMjBweXJhbWlkcyUyMG11c2V1bXxlbnwxfHx8fDE3NzAzMzIzMzl8MA&ixlib=rb-4.1.0&q=80&w=1080',
                             ),
                             fit: BoxFit.cover,
-                          ),
-                        ),
-                        foregroundDecoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                          ),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              AppColors.primary.withOpacity(0.8),
-                            ],
                           ),
                         ),
                       ),
@@ -271,10 +275,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         padding: const EdgeInsets.all(24),
                         child: Column(
                           children: [
-                            Row(
+                            const Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -306,18 +310,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  width: 64,
-                                  height: 64,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: const Icon(
-                                    Icons.menu_book_rounded,
-                                    size: 32,
-                                    color: AppColors.white,
-                                  ),
+                                Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 32,
+                                  color: AppColors.white,
                                 ),
                               ],
                             ),
@@ -363,13 +359,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                             color: AppColors.white,
                                             borderRadius:
                                                 BorderRadius.circular(4),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: AppColors.white
-                                                    .withOpacity(0.5),
-                                                blurRadius: 8,
-                                              ),
-                                            ],
                                           ),
                                         ),
                                       );
@@ -383,7 +372,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                               width: double.infinity,
                               height: 48,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  widget.onNavigate(AppScreen.modules);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.white,
                                   foregroundColor: AppColors.primary,

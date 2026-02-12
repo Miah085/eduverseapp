@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed import
 
 class GradeSubject {
   final String name;
@@ -45,6 +45,7 @@ class _GradesScreenState extends State<GradesScreen>
   late List<AnimationController> _gradeControllers;
   late List<AnimationController> _achievementControllers;
 
+  // Static data for now (Connect to Supabase 'grades' table later)
   final List<GradeSubject> subjects = [
     GradeSubject(
         name: 'Science', grade: 92, color: AppColors.cyan, trend: '+5'),
@@ -116,18 +117,22 @@ class _GradesScreenState extends State<GradesScreen>
     );
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      for (var i = 0; i < _gradeControllers.length; i++) {
-        Future.delayed(Duration(milliseconds: i * 100), () {
-          if (mounted) _gradeControllers[i].forward();
-        });
+      if (mounted) {
+        for (var i = 0; i < _gradeControllers.length; i++) {
+          Future.delayed(Duration(milliseconds: i * 100), () {
+            if (mounted) _gradeControllers[i].forward();
+          });
+        }
       }
     });
 
     Future.delayed(const Duration(milliseconds: 1200), () {
-      for (var i = 0; i < _achievementControllers.length; i++) {
-        Future.delayed(Duration(milliseconds: i * 100), () {
-          if (mounted) _achievementControllers[i].forward();
-        });
+      if (mounted) {
+        for (var i = 0; i < _achievementControllers.length; i++) {
+          Future.delayed(Duration(milliseconds: i * 100), () {
+            if (mounted) _achievementControllers[i].forward();
+          });
+        }
       }
     });
   }

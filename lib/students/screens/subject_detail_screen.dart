@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart'; // Ensure this path is correct
-// Import your ModulesScreen if you want to navigate further to the list of modules
-import 'modules_screen.dart';
+import 'package:eduverse/students/utils/app_colors.dart'; // Fixed path
+import 'modules_screen.dart'; // Local import
 
 class SubjectDetailScreen extends StatelessWidget {
   final String subjectName;
@@ -173,7 +172,7 @@ class SubjectDetailScreen extends StatelessWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate to your existing ModulesScreen
+                          // Navigate to ModulesScreen
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -221,7 +220,7 @@ class SubjectDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // Module List Items (Static examples based on image)
+                    // Module List Items
                     _buildModuleTile(
                         "Ancient Civilizations", "10 Lessons", 1.0, true),
                     const SizedBox(height: 16),

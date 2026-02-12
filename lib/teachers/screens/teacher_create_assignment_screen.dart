@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/animated_card.dart';
+import 'package:go_router/go_router.dart';
 
 class TeacherCreateAssignmentScreen extends StatefulWidget {
   const TeacherCreateAssignmentScreen({super.key});
@@ -114,7 +115,7 @@ class _TeacherCreateAssignmentScreenState
         backgroundColor: AppColors.success,
       ),
     );
-    Navigator.pop(context);
+    context.pop();
   }
   
   @override
@@ -182,7 +183,7 @@ class _TeacherCreateAssignmentScreenState
             Row(
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => context.pop(),
                   child: Container(
                     width: 40,
                     height: 40,
@@ -579,7 +580,7 @@ class _TeacherCreateAssignmentScreenState
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.gray100,
                   foregroundColor: AppColors.gray700,

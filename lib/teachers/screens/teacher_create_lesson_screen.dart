@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/animated_card.dart';
+import 'package:go_router/go_router.dart';
 
 class TeacherCreateLessonScreen extends StatefulWidget {
   const TeacherCreateLessonScreen({super.key});
@@ -114,7 +115,7 @@ class _TeacherCreateLessonScreenState extends State<TeacherCreateLessonScreen> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () => Navigator.pop(context),
+              onTap: () => context.pop(),
               child: Container(
                 width: 40,
                 height: 40,
@@ -468,7 +469,7 @@ class _TeacherCreateLessonScreenState extends State<TeacherCreateLessonScreen> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.gray100,
                   foregroundColor: AppColors.gray700,
@@ -490,7 +491,7 @@ class _TeacherCreateLessonScreenState extends State<TeacherCreateLessonScreen> {
                       backgroundColor: AppColors.success,
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 icon: const Icon(LucideIcons.save),
                 label: const Text('Save & Publish'),

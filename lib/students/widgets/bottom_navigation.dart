@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
-import '../student_app.dart';
+import '../main.dart';
 
 class BottomNavigation extends StatefulWidget {
   final AppScreen currentScreen;

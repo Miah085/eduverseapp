@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; // Added for navigation
 import 'dart:math' as math;
-import 'package:eduverse/students/utils/app_colors.dart'; // Fixed Import
+import '../utils/app_colors.dart';
 
 class VREntryScreen extends StatefulWidget {
-  // onBack is less critical with GoRouter but kept for compatibility
-  final VoidCallback? onBack;
+  final VoidCallback onBack;
 
-  const VREntryScreen({super.key, this.onBack});
+  const VREntryScreen({super.key, required this.onBack});
 
   @override
   State<VREntryScreen> createState() => _VREntryScreenState();
@@ -113,135 +111,125 @@ class _VREntryScreenState extends State<VREntryScreen>
 
   @override
   Widget build(BuildContext context) {
-    // FIXED: Wrapped in Scaffold to provide Material context
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E1B4B), Color(0xFF312E81)],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF1E1B4B), Color(0xFF312E81)],
         ),
-        child: Stack(
-          children: [
-            ..._buildStars(),
-            SafeArea(
-              child: Column(
-                children: [
-                  FadeTransition(
-                    opacity: _headerController,
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0, -0.2),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(
-                        parent: _headerController,
-                        curve: Curves.easeOut,
-                      )),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  // UPDATED: Use GoRouter context.pop() or fallback to callback
-                                  onPressed: () {
-                                    if (context.canPop()) {
-                                      context.pop();
-                                    } else if (widget.onBack != null) {
-                                      widget.onBack!();
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back,
-                                    color: AppColors.white,
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Back to Home',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            RotationTransition(
-                              turns: _rotateController,
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      AppColors.primary,
-                                      AppColors.primaryLight
-                                    ],
-                                  ),
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.primary.withOpacity(0.5),
-                                      blurRadius: 24,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  size: 40,
+      ),
+      child: Stack(
+        children: [
+          ..._buildStars(),
+          SafeArea(
+            child: Column(
+              children: [
+                FadeTransition(
+                  opacity: _headerController,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, -0.2),
+                      end: Offset.zero,
+                    ).animate(CurvedAnimation(
+                      parent: _headerController,
+                      curve: Curves.easeOut,
+                    )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: widget.onBack,
+                                icon: const Icon(
+                                  Icons.arrow_back,
                                   color: AppColors.white,
                                 ),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'Virtual Worlds',
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
+                              const SizedBox(width: 8),
+                              Text(
+                                'Back to Home',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          RotationTransition(
+                            turns: _rotateController,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    AppColors.primary,
+                                    AppColors.primaryLight
+                                  ],
+                                ),
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.primary.withOpacity(0.5),
+                                    blurRadius: 24,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.remove_red_eye_outlined,
+                                size: 40,
                                 color: AppColors.white,
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Use your gaze to select a destination',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.white.withOpacity(0.8),
-                              ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Virtual Worlds',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.white,
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Use your gaze to select a destination',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.white.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(24, 16, 24, 120),
-                      children: [
-                        ...List.generate(vrSpaces.length, (index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: _buildVRCard(vrSpaces[index], index),
-                          );
-                        }),
-                        const SizedBox(height: 24),
-                        _buildInfoCard(),
-                      ],
-                    ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 120),
+                    children: [
+                      ...List.generate(vrSpaces.length, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _buildVRCard(vrSpaces[index], index),
+                        );
+                      }),
+                      const SizedBox(height: 24),
+                      _buildInfoCard(),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

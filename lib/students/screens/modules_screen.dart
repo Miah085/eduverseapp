@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:eduverse/students/utils/app_colors.dart'; // Fixed Import
-import 'package:eduverse/students/screens/module_detail_screen.dart'; // Fixed Import
+import '../utils/app_colors.dart';
+import '../main.dart';
+// IMPORT THE NEW SCREEN HERE
+import 'module_detail_screen.dart';
 
 class ModulesScreen extends StatefulWidget {
-  // onBack is less critical if this screen is pushed, but kept for compatibility
-  final VoidCallback? onBack;
+  final VoidCallback onBack;
 
-  const ModulesScreen({super.key, this.onBack});
+  const ModulesScreen({super.key, required this.onBack});
 
   @override
   State<ModulesScreen> createState() => _ModulesScreenState();
@@ -107,171 +108,161 @@ class _ModulesScreenState extends State<ModulesScreen>
 
   @override
   Widget build(BuildContext context) {
-    // FIXED: Wrapped in Scaffold to provide Material context
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.white, Color(0xFFF3F0FF)],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.white, Color(0xFFF3F0FF)],
         ),
-        child: SafeArea(
-          bottom: false,
-          child: ListView(
-            padding: const EdgeInsets.only(bottom: 120),
-            children: [
-              FadeTransition(
-                opacity: _headerController,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, -0.2),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: _headerController,
-                    curve: Curves.easeOut,
-                  )),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.purple, AppColors.purpleDark],
-                      ),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        bottomRight: Radius.circular(40),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.purple.withOpacity(0.3),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: ListView(
+          padding: const EdgeInsets.only(bottom: 120),
+          children: [
+            FadeTransition(
+              opacity: _headerController,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, -0.2),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(
+                  parent: _headerController,
+                  curve: Curves.easeOut,
+                )),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.purple, AppColors.purpleDark],
                     ),
-                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Back button logic: check if we can pop, otherwise call widget.onBack
-                        IconButton(
-                          onPressed: () {
-                            if (Navigator.canPop(context)) {
-                              Navigator.pop(context);
-                            } else if (widget.onBack != null) {
-                              widget.onBack!();
-                            }
-                          },
-                          icon: const Icon(Icons.arrow_back,
-                              color: AppColors.white),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.purple.withOpacity(0.3),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: widget.onBack,
+                        icon: const Icon(Icons.arrow_back,
+                            color: AppColors.white),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'History Course',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.white.withOpacity(0.8),
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'History Course',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.white.withOpacity(0.8),
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Learning Modules',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.white,
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Learning Modules',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.white,
-                          ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        const SizedBox(height: 16),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Course Progress',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: AppColors.white,
-                                    ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Course Progress',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.white,
                                   ),
-                                  Text(
-                                    '45%',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                height: 12,
-                                decoration: BoxDecoration(
-                                  color: AppColors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(6),
                                 ),
-                                child: AnimatedBuilder(
-                                  animation: _progressController,
-                                  builder: (context, child) {
-                                    return FractionallySizedBox(
-                                      alignment: Alignment.centerLeft,
-                                      widthFactor:
-                                          0.45 * _progressController.value,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.circular(6),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: AppColors.white
-                                                  .withOpacity(0.5),
-                                              blurRadius: 8,
-                                            ),
-                                          ],
-                                        ),
+                                Text(
+                                  '45%',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: AppColors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: AnimatedBuilder(
+                                animation: _progressController,
+                                builder: (context, child) {
+                                  return FractionallySizedBox(
+                                    alignment: Alignment.centerLeft,
+                                    widthFactor:
+                                        0.45 * _progressController.value,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppColors.white
+                                                .withOpacity(0.5),
+                                            blurRadius: 8,
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
-                child: Text(
-                  'All Modules',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.gray800,
-                  ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+              child: Text(
+                'All Modules',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.gray800,
                 ),
               ),
-              const SizedBox(height: 16),
-              ...List.generate(modules.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16, left: 24, right: 24),
-                  child: _buildModuleCard(modules[index], index),
-                );
-              }),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            ...List.generate(modules.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16, left: 24, right: 24),
+                child: _buildModuleCard(modules[index], index),
+              );
+            }),
+          ],
         ),
       ),
     );
@@ -286,6 +277,7 @@ class _ModulesScreenState extends State<ModulesScreen>
           child: Opacity(
             opacity: _moduleControllers[index].value,
             child: GestureDetector(
+              // NAVIGATION LOGIC ADDED HERE
               onTap: module.status != ModuleStatus.locked
                   ? () {
                       Navigator.push(
@@ -293,7 +285,6 @@ class _ModulesScreenState extends State<ModulesScreen>
                         MaterialPageRoute(
                           builder: (context) => ModuleDetailScreen(
                             moduleName: module.title,
-                            // Pass a callback to pop the detail screen
                             onBack: () => Navigator.pop(context),
                           ),
                         ),
